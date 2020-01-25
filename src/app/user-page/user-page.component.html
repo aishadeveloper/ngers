@@ -1,0 +1,13 @@
+<div *ngIf="tempUser">
+    <h2>{{tempUser.lastName | uppercase}} Details</h2>
+    <div><span>id:</span>{{returnedUser.id}}</div>
+    <div>
+        <label>
+            name:
+            <input [(ngModel)]="tempUser.name" placeholder="name"/>
+        </label>
+    </div>
+</div>
+
+<p>user-page works!</p>
+

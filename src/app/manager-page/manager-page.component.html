@@ -1,0 +1,24 @@
+<p>manager-page works!</p>
+
+<!--
+    <a class="nav-item nav-link" routerLinkActive="active" routerLink="/">Home</a>
+    <a class="nav-item nav-link" routerLinkActive="active" routerLink="allusers">All Users</a>
+    <a class="nav-item nav-link" routerLinkActive="active" routerLink="allexpenses">All Expenses</a>
+    <a class="nav-item nav-link" routerLinkActive="active" routerLink="logout">Logout</a>
+    <a class="nav-item nav-link" routerLinkActive="active" routerLink="new">New Request</a>
+    <a class="nav-item nav-link" routerLinkActive="active" routerLink="all">All Requests</a>
+    <a class="nav-item nav-link" routerLinkActive="active" routerLink="allmanagers">All Managers</a>  
+
+-->
+
+<app-user-all></app-user-all>
+
+
+<div>
+    <button (click)="viewExpenses()">View Pending Requests</button>
+    <button (click)="viewProfile()">View All Users</button>  <!--  Will need a button for all requests from this user -->
+    <button (click)="newExpense()">View All Manager Requests</button>
+    <button (click)="viewExpenses()">View Resolved Requests</button>    
+    <button (click)="employeeHomepage()">View Manager Homepage</button>
+    <button (click)="logout()">Logout</button>
+</div>

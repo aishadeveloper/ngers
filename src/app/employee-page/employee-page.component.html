@@ -1,0 +1,217 @@
+<div *ngIf="mainNavbar">
+    <p>Employee Reimbursement System</p>
+    <nav class="nav nav-tabs navbar-dark bg-light">
+        <app-logo></app-logo>
+
+        <button class="nav-item nav-link" (click)="loginButton()">Login</button>
+        <button class="nav-item nav-link" (click)="logout()">Logout</button>
+    </nav>
+</div>
+
+
+<div *ngIf="showUserDetails">
+    <div *ngIf="tempUser">
+        <!--
+ <div>Welcome {{tempUser.firstName}} {{tempUser.lastName}} </div>
+        -->       
+        <div>
+            <button (click)="newExpense()">Submit Request</button>
+            <button (click)="populateEmployeeExpenses()">Pending Requests</button>
+            <button (click)="populateResolvedEmployeeExpenses()">Resolved Requests</button>
+            <button (click)="viewProfile()">View Profile</button>
+            <button (click)="employeeHomepage()">Employee Homepage</button>
+            <button (click)="logout()">Logout</button>
+
+        </div>
+    </div>
+</div>
+
+<div *ngIf="showManagerPage">
+    <div>
+        <button (click)="populatePendingExpenses()">View All Pending Requests</button>        
+        <button (click)="populateAllResolved()">View Resolved Requests</button>        
+        <button (click)="viewAllUsers()">View all Employees</button>
+        <button (click)="viewProfile()">View Profile</button>
+        <button (click)="managerHomePage()">Manager Home Page</button>       
+        <button (click)="logout()">Logout</button>
+    </div>
+</div>
+
+<div *ngIf="managerShowAllExpenses">
+    <div *ngFor="let expense of expenses">{{expense | json}}</div>
+</div>
+
+<div *ngIf="showProfile">
+    <h2>ID: {{tempUser.id}}</h2>
+    <h2>Last Name: {{tempUser.lastName}}</h2>
+    <h2>First Name: {{tempUser.firstName}}</h2>
+    <h2>User Name {{tempUser.userName}}</h2>
+    <h2>Password: {{tempUser.password}}</h2>
+    <button (click)="updateProfile()">Update Profile</button>
+</div>
+
+
+<div *ngIf="editProfile">
+    <div>
+        <label>
+            Last Name:
+            <input [(ngModel)]="tempUser.lastName" />
+        </label>
+    </div>
+    <div>
+        <label>
+            First Name:
+            <input [(ngModel)]="tempUser.firstName" />
+        </label>
+    </div>
+    <div>
+        <label>
+            Username:
+            <input [(ngModel)]="tempUser.userName" />
+        </label>
+    </div>
+    <div>
+        <label>
+            Password:
+            <input [(ngModel)]="tempUser.password" />
+        </label>
+    </div>
+    <button class="btn btn-primary" (click)="saveUpdateProfile()">Save Profile</button>
+</div>
+
+
+<form #expenseForm="ngForm" *ngIf="showReimbursementRequest">
+    <div class="panel-body">
+        <div class="form-group">
+            <label for="title" class="control-label">Title</label>
+            <input class="form-control" name="title" [(ngModel)]="expense.title" type="text" #idControl="ngModel">
+        </div>
+        <div class="form-group">
+            <label for="expenseDate" class="control-label">Expense Date</label>
+            <input class="form-control" name="expenseDate" [(ngModel)]="expense.expenseDate" type="date"
+                #expenseDateControl="ngModel">
+        </div>
+        <div class="form-group">
+            <label for="expenseAmount" class="control-label">Expense Amount</label>
+            <input class="form-control" name="expenseAmount" [(ngModel)]="expense.expenseAmount" type="number"
+                #expenseAmountControl="ngModel">
+        </div>
+        <div class="form-group">
+            <label for="userId" class="control-label">User ID</label>
+            <input class="form-control" name="userId" [(ngModel)]="expense.userId" type="number"
+                #userIdControl="ngModel">
+        </div>
+        <div class="form-group">
+            <label for="imageLink" class="control-label">Image Link</label>
+            <input class="form-control" name="imageLink" [(ngModel)]="expense.imageLink" type="text"
+                #imageLinkControl="ngModel">
+        </div>
+    </div>
+    <button class="btn btn-primary" (click)="saveExpense()">Save Expense</button>
+</form>
+
+<div *ngIf="managerShowAllExpenses">
+
+</div>
+
+<!--
+<div *ngIf="pendingApprovalExpenses">
+    <ul *ngFor="let expense of expenses">
+        <li *ngIf="(expense.decision !== 'Approved') && (expense.decision !== 'Denied')">
+            {{expense.id}} {{expense.userId}} {{expense.title}} {{expense.expenseDate}} {{expense.expenseAmount}}
+            <button
+                (click)="updateExpenseApprove($event, expense.id,  expense.title, expense.userId, expense.expenseDate, expense.expenseAmount)">Approve</button>
+            <button (click)="updateExpenseDeny($event, expense.id, expense.title, expense.userId, expense.expenseDate, expense.expenseAmount)">Deny</button>
+        </li>
+    </ul>
+</div>
+
+-->
+
+
+
+
+<div *ngIf="pendingApprovalExpenses">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">User ID</th>
+                <th scope="col">Title</th>
+                <th scope="col">Date</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Decision</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr scope="row" *ngFor="let expense of expenses">
+                <td>{{expense.id}}</td>
+                <td>{{expense.userId}}</td>
+                <td>{{expense.title}}</td>
+                <td>{{expense.expenseDate}}</td>
+                <td>{{expense.expenseAmount}}</td>
+                <td><button
+                    (click)="updateExpenseApprove($event, expense.id,  expense.title, expense.userId, expense.expenseDate, expense.expenseAmount)">Approve</button>
+                <button (click)="updateExpenseDeny($event, expense.id, expense.title, expense.userId, expense.expenseDate, expense.expenseAmount)">Deny</button></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div *ngIf="pendingUserExpenses">
+    <ul *ngFor="let expense of expenses">
+        <li *ngIf="expense.userId == tempUserId">
+            {{expense.id}} {{expense.userId}} {{expense.title}} {{expense.expenseDate}} {{expense.expenseAmount}}
+        </li>
+    </ul>
+</div>
+
+<div *ngIf="resolvedUserExpenses">
+    <ul *ngFor="let expense of expenses">
+        <li
+            *ngIf="expense.userId === tempUserId  && ((expense.decision === 'Approved') || (expense.decision === 'Denied'))">
+            {{expense.id}} {{expense.userId}} {{expense.title}} {{expense.expenseDate}} {{expense.expenseAmount}}
+            {{expense.decision}}
+        </li>
+    </ul>
+</div>
+
+
+<div *ngIf="resolvedAllExpenses">
+    <ul *ngFor="let expense of expenses">
+        <li
+            *ngIf="(expense.decision === 'Approved') || (expense.decision === 'Denied')">
+            {{expense.id}} {{expense.userId}} {{expense.title}} {{expense.expenseDate}} {{expense.expenseAmount}}
+            {{expense.managerId}} {{expense.decision}}
+        </li>
+    </ul>
+
+</div>
+
+
+<!--
+<div>Current User:  {{currentUser.id}}  FirstName: {{currentUser.firstName}}  LastName:{{currentUser.lastName}}  TempUserId: {{TempUserId}} Temp Message: {{testMessage}}</div>
+<div *ngFor="let expense of expenses">{{expense | json}}</div>
+
+<div *ngFor="let user of users">{{user | json}}</div>
+<app-user-all></app-user-all>
+-->
+
+
+<div *ngIf="viewAllEmployees">    
+    <ul *ngFor="let user of users">
+        <li>{{user.id}} {{user.lastName}} {{user.firstName}} <button (click)="showEmployeeRequests($event, user.id)">View Requests</button></li>
+    </ul>
+</div>
+
+<div *ngIf="viewOneEmployeeRequests">
+    <ul *ngFor="let expense of expenses">
+        <li *ngIf="expense.userId === singleId && ((expense.decision !== 'Approved') && (expense.decision !== 'Denied'))">
+            {{expense.id}} {{expense.userId}} {{expense.title}} {{expense.expenseDate}} {{expense.expenseAmount}}
+            <button
+                (click)="updateExpenseApprove($event, expense.id,  expense.title, expense.userId, expense.expenseDate, expense.expenseAmount)">Approve</button>
+            <button (click)="updateExpenseDeny($event, expense.id, expense.title, expense.userId, expense.expenseDate, expense.expenseAmount)">Deny</button>
+        </li>
+    </ul>
+
+</div>
